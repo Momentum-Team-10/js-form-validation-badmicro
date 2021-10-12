@@ -10,6 +10,8 @@ let daysInput = document.getElementById('days')
 
 let CVVInput = document.getElementById('cvv')
 
+let creditCardInput = document.getElementById('credit-card')
+
 form.addEventListener('submit', (e) => {
 
     e.preventDefault()
@@ -17,6 +19,7 @@ form.addEventListener('submit', (e) => {
     validateCar(carYearInput, carMakeInput, carModelInput)
     validateDays(daysInput)
     validateCVV(CVVInput)
+    validateCardNumber()
 })
 
 
@@ -139,11 +142,24 @@ function validateCVV (input) {
 }
 
 function validateCardNumber(number) {
-    var regex = new RegExp("^[0-9]{16}$");
-    if (!regex.test(number))
-        return false;
+let errorEl = document.createElement('p')
+errorEl.id = 'cc-error'
 
-    return luhnCheck(number);
+    var regex = new RegExp("^[0-9]{16}$");
+    if (!regex.test(number)) {
+    if(document.getElementById('cc-error')) {
+        document.getElementById('cc-error').remove()
+    }
+    errorEl.innerText = "Enter a valid 16-digit credit card"
+    document.getElementById('credit-card-field').appendChild(errorEl)
+    creditCardInput.parentElement.classList.remove('input-valid')
+    creditCardInput.parentElement.classList.add('input-invalid')
+    } else {
+        creditCardInput.parentElement.classList.remove('input-invalid')
+        creditCardInput.parentElement.classList.add('input-valid')
+        return luhnCheck(number);
+    }
+    
 }
 
 function luhnCheck(val) {
